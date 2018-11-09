@@ -2,6 +2,7 @@ const express = require('express');
 
 const tooLongAction = require('../middleware/tooLongAction.js');
 const tooLongProject = require('../middleware/tooLongProject.js');
+const idCheck = require('../middleware/idCheck.js');
 
 const actionModel = require('../data/helpers/actionModel.js');
 const projectModels = require('../data/helpers/projectModel.js');
@@ -55,7 +56,7 @@ server.get('/actionModel/:id', (req, res) => {
     })
 })
 
-server.post('/actionModel', tooLongAction, async (req, res) => {
+server.post('/actionModel', idCheck, tooLongAction, async (req, res) => {
   console.log(req.body)
   try {
   const userData = req.body;
