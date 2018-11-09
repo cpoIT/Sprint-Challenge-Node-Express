@@ -1,7 +1,11 @@
 const express = require('express');
 
+const tooLongAction = require('../middleware/tooLongAction.js');
+const tooLongProject = require('../middleware/tooLongProject.js');
+
 const actionModel = require('../data/helpers/actionModel.js');
 const projectModels = require('../data/helpers/projectModel.js');
+
 // const mappers = require('../data/helpers/mappers.js');
 
 const server = express();
@@ -40,7 +44,7 @@ server.get('/actionModel/:id', (req, res) => {
   return actionModel.get(id)
     .then(step => {
       console.log(step)
-      return typeof step.id*1 === 'number' 
+      return step 
       ? res.status(200).json(step)
       : res.status(404).json({ "errorMessage": `Cannot find ${id}`});
     })
@@ -51,15 +55,13 @@ server.get('/actionModel/:id', (req, res) => {
     })
 })
 
-server.post('/actionModel', async (req, res) => {
+server.post('/actionModel', tooLongAction, async (req, res) => {
   console.log(req.body)
   try {
   const userData = req.body;
   console.log('userData', userData)
   const fullTask = await actionModel.insert(userData)
   console.log('fullTask', fullTask)
-  // const user = await actionModel.get(fullTask)
-  // console.log('user', user)
   res.status(201).json(fullTask)
   } catch (error) {
     let message = 'error creating the task';
@@ -131,7 +133,7 @@ server.get('/projectModels/:id', (req, res) => {
     })
 })
 
-server.post('/projectModels', async (req, res) => {
+server.post('/projectModels', tooLongProject, async (req, res) => {
   console.log('-------------------------')
   console.log(req.body)
   console.log(req.params)
