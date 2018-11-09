@@ -162,20 +162,22 @@ server.post('/projectModels', tooLongProject, async (req, res) => {
 
 server.put('/projectModels/:id', (req, res) => {
   const { id } = req.params;
+  console.log(id);
   const changes = req.body;
-  console.log(id)
-  console.log(changes)
+  console.log('ID', id)
+  console.log('CHANGES', changes)
   projectModels.update(id, changes)
     .then(task =>    {
       console.log('TASK', task)
+      console.log(task.id, id)
       if (task) {
-        res.status(200).json({ message: `Updated Task: { id: ${task.id}, project_id: ${task.project_id}, description: ${task.description}, notes: ${task.notes}, completed: ${task.completed} }`})
+        res.status(200).json({ message: `Updated Task: { id: ${task.id}, name: ${task.name}, description: ${task.description}, completed: ${task.completed} }`})
       } else {
         res.status(404).json({ message: 'user not found' });
       }
     })
     .catch(err => {
-      res.status(500).json({ message: 'error updating the user' });
+      res.status(500).json({ message: 'error updating the user', error: err });
     });
   });
 
@@ -185,26 +187,9 @@ server.delete('/projectModels/:id', (req, res) => {
       res.status(200).json(`${count} task(s) deleted`);
     })
     .catch(err => {
-      res.status(500).json({ message: 'error deleting task' });
+      res.status(500).json({ message: 'error deleting task', error: err });
     });
 });
 
 
 module.exports = server;
-
-/* 
-
-// GET MAPPERS
-server.get('/mappers', (req, res) => {
-  mappers.get()
-    .then(item => {
-      return res.status(200).json(item)
-    })
-    .catch(err => {
-      res.status(500).json({
-        message: "Cannot retrieve ITEM",
-        error: err })
-    })
-})
-
-*/
