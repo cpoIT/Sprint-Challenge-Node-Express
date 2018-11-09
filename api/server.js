@@ -25,7 +25,7 @@ server.get('/actionModel', (req, res) => {
     })
     .catch(err => {
       res.status(500).json({
-        message: "Cannot retrieve Sprint steps",
+        message: "Currently, we are having server issues. Our best Lambda's programmers are working on it.",
         error: err })
     })
 })
@@ -51,7 +51,7 @@ server.get('/actionModel/:id', (req, res) => {
     })
     .catch(err => {
       res.status(500).json({
-        message: "Cannot retrieve Sprint Step",
+        message: "Currently, we are having server issues. Our best Lambda's programmers are working on it.",
         error: err })
     })
 })
@@ -65,7 +65,7 @@ server.post('/actionModel', idCheck, tooLongAction, async (req, res) => {
   console.log('fullTask', fullTask)
   res.status(201).json(fullTask)
   } catch (error) {
-    let message = 'error creating the task';
+    let message = "Currently, we are having server issues. Our best Lambda's programmers are working on it.";
     res.status(500).json({ message, error });
     }
 })
@@ -85,17 +85,19 @@ server.put('/actionModel/:id', (req, res) => {
       }
     })
     .catch(err => {
-      res.status(500).json({ message: 'error updating the user' });
+      res.status(500).json({ message: "Currently, we are having server issues. Our best Lambda's programmers are working on it." });
     });
   });
 
 server.delete('/actionModel/:id', (req, res) => {
   actionModel.remove(req.params.id)
     .then(count => {
-      res.status(200).json(`${count} task(s) deleted`);
+      !count
+      ? res.status(404).json({ error: "There is no task with that id." })
+      : res.status(200).json(`${count} task(s) deleted`);
     })
     .catch(err => {
-      res.status(500).json({ message: 'error deleting task' });
+      res.status(500).json({ message: "Currently, we are having server issues. Our best Lambda's programmers are working on it." });
     });
 });
 
@@ -110,26 +112,22 @@ server.get('/projectModels', (req, res) => {
     })
     .catch(err => {
       res.status(500).json({
-        message: "Cannot retrieve ITEM",
+        message: "Currently, we are having server issues. Our best Lambda's programmers are working on it.",
         error: err })
     })
 })
 
 server.get('/projectModels/:id', (req, res) => {
   const { id } = req.params
-  console.log(id)
-  console.log(req.body)
   return projectModels.get(id)
     .then(step => {
-      console.log('STEP', step, typeof step)
-      // return typeof step.id === 'number' 
       return step.id
       ? res.status(200).json(step)
       : res.status(404).json({ "errorMessage": `Cannot find ${id}`});
     })
     .catch(err => {
       res.status(500).json({
-        message: "Cannot retrieve Sprint Step",
+        message: "Currently, we are having server issues. Our best Lambda's programmers are working on it.",
         error: err })
     })
 })
@@ -140,11 +138,7 @@ server.post('/projectModels', tooLongProject, async (req, res) => {
   console.log(req.params)
   try {
   const projectData = req.body;
-  console.log('projectData', projectData)
   const fullTask = await projectModels.insert(projectData)
-  console.log('fullTask', fullTask)
-  // const user = await actionModel.get(fullTask)
-  // console.log('user', user)
   res.status(201).json(fullTask)
   } catch (error) {
     let message = 'error creating the task';
@@ -163,14 +157,9 @@ server.post('/projectModels', tooLongProject, async (req, res) => {
 
 server.put('/projectModels/:id', (req, res) => {
   const { id } = req.params;
-  console.log(id);
   const changes = req.body;
-  console.log('ID', id)
-  console.log('CHANGES', changes)
   projectModels.update(id, changes)
     .then(task =>    {
-      console.log('TASK', task)
-      console.log(task.id, id)
       if (task) {
         res.status(200).json({ message: `Updated Task: { id: ${task.id}, name: ${task.name}, description: ${task.description}, completed: ${task.completed} }`})
       } else {
@@ -178,7 +167,7 @@ server.put('/projectModels/:id', (req, res) => {
       }
     })
     .catch(err => {
-      res.status(500).json({ message: 'error updating the user', error: err });
+      res.status(500).json({ message: "Currently, we are having server issues. Our best Lambda's programmers are working on it.", error: err });
     });
   });
 
@@ -188,7 +177,7 @@ server.delete('/projectModels/:id', (req, res) => {
       res.status(200).json(`${count} task(s) deleted`);
     })
     .catch(err => {
-      res.status(500).json({ message: 'error deleting task', error: err });
+      res.status(500).json({ message: "Currently, we are having server issues. Our best Lambda's programmers are working on it.", error: err });
     });
 });
 
